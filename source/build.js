@@ -19,4 +19,7 @@ for (const [slot, instant] of [['javascript:INSTANT', true], ['javascript:SAFE',
   console.log(slot.slice(11), 'bookmarklet length:', href.length);
 }
 html = html.split('{{VERSION}}').join(VERSION);
+// ฝังรูปเป็น data URI — ไฟล์แจกต้องเป็น .html ไฟล์เดียว · ใน page.html เขียน {{IMG:ชื่อไฟล์ใน assets}}
+html = html.replace(/\{\{IMG:([\w.-]+)\}\}/g, (_, name) =>
+  'data:image/png;base64,' + fs.readFileSync(__dirname + '/assets/' + name).toString('base64'));
 fs.writeFileSync(__dirname + '/../sgs-snap.html', html);

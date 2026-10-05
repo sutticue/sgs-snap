@@ -40,13 +40,21 @@
   td:first-child { color: var(--muted); white-space: nowrap; }
 
   .flow li b { font-weight: 600; }
+  .guide { margin: 24px 0 0; }
+  .guide img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+  .guide figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
   .flow .sub { display: block; color: var(--muted); font-size: 14px; }
   ul.notes { margin: 0; padding-left: 20px; color: var(--muted); }
   ul.notes li { margin: 4px 0; }
 
+  .disclaimer { color: var(--muted); font-size: 14px; }
+  .disclaimer p { margin: 0 0 8px; }
+  .disclaimer b { color: var(--text); font-weight: 600; }
   footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   footer p { margin: 0 0 4px; }
   footer .credit { color: var(--text); letter-spacing: .02em; }
+  footer a { color: inherit; text-underline-offset: 2px; }
+  footer a:hover { color: var(--text); }
 
   @media (max-width: 600px) { .versions { grid-template-columns: 1fr; } }
 </style>
@@ -54,7 +62,7 @@
 <body>
 <main class="wrap">
   <h1>SGS Snap</h1>
-  <p class="lead">copy คะแนนจาก Google Sheets แล้ววางลงหน้า "บันทึกผลการเรียน" ของ SGS ได้ทีเดียวหลายช่อง</p>
+  <p class="lead">copy คะแนนจาก Google Sheets หรือ Excel แล้ววางลงหน้า "บันทึกผลการเรียน" ของ SGS ได้ทีเดียวหลายช่อง</p>
 
   <h2>เลือกแบบที่ต้องการ <span>— ลากปุ่มขึ้นแถบ Bookmark จะเอาตัวเดียวหรือทั้งสองตัวก็ได้</span></h2>
   <div class="versions">
@@ -95,31 +103,54 @@
     <li><b>ปิดหน้านี้ได้เลย</b>
       <span class="sub">ปุ่มอยู่บนแถบถาวร ปิด browser ก็ไม่หาย · ถ้ามีปุ่มเวอร์ชันเก่าค้างอยู่ คลิกขวา → ลบ</span></li>
   </ol>
+  <figure class="guide">
+    <img src="{{IMG:install-guide.png}}" alt="กด Ctrl+Shift+B ให้แถบ Bookmark โผล่ แล้วลากปุ่ม SGS Snap หรือ SGS Snap Safe ขึ้นไปวางบนแถบนั้น">
+    <figcaption>กด Ctrl+Shift+B ให้แถบ Bookmark โผล่ แล้วลากปุ่ม SGS Snap หรือ SGS Snap Safe ขึ้นไปวางบนแถบ</figcaption>
+  </figure>
 
   <h2>ใช้งาน <span>— ทุกครั้งที่เปิดหน้า SGS</span></h2>
   <ol class="flow">
-    <li><b>เปิดหน้า "บันทึกผลการเรียน" ใน SGS</b> แล้วคลิกปุ่มบนแถบ Bookmark
+    <li><b>เข้าเมนู ผลการเรียน → "บันทึกผลการเรียน ตลอดภาคเรียน"</b> แล้วเลือกรายวิชาและกลุ่ม</li>
+    <li><b>ตั้ง "รายการ / หน้า" ให้เท่ากับจำนวนนักเรียนในห้อง</b>
+      <span class="sub">ช่องตัวเลขก่อนคำว่า "/ หน้า" — ต้องเห็นนักเรียนครบทุกคนในหน้าเดียว ไม่งั้นวางได้ไม่ครบ</span></li>
+    <li><b>คลิกปุ่มบนแถบ Bookmark</b>
       <span class="sub">มุมขวาล่างต้องขึ้น <b>[{{VERSION}} · Snap] พร้อมแล้ว</b> หรือ <b>[{{VERSION}} · Safe] พร้อมแล้ว</b> — ไม่ขึ้น = ปุ่มยังไม่ทำงาน</span></li>
     <li><b>ติ๊กเปิดคอลัมน์</b> ที่จะกรอกใน SGS</li>
-    <li><b>copy คะแนนจาก Google Sheets</b> — ลากเลือกเฉพาะตัวเลข แล้ว <kbd>Ctrl</kbd>+<kbd>C</kbd>
-      <span class="sub">เรียงนักเรียนให้ตรงกับลำดับใน SGS · ไม่ต้องติดหัวตาราง ชื่อ หรือเลขที่</span></li>
+    <li><b>copy คะแนนจาก Google Sheets หรือ Excel</b> — ลากเลือกเฉพาะตัวเลข แล้ว <kbd>Ctrl</kbd>+<kbd>C</kbd>
+      <span class="sub">เลือกได้หลายคอลัมน์พร้อมกัน เช่น ช่อง 10, 11, 12 ทีเดียว · เรียงนักเรียนให้ตรงกับลำดับใน SGS · ไม่ต้องติดหัวตาราง ชื่อ หรือเลขที่</span></li>
     <li><b>คลิกช่องแรกใน SGS</b> (นักเรียนคนแรก คอลัมน์แรกของข้อมูล) แล้ว <kbd>Ctrl</kbd>+<kbd>V</kbd></li>
     <li><b>ตรวจกล่องยืนยัน</b> — ดูว่าแถวและคอลัมน์ถูก แล้วกดตกลง</li>
+    <li><b>กดปุ่มบันทึกของ SGS</b> (ไอคอนแผ่นดิสก์ซ้ายบนของตาราง) หลังวางเสร็จ
+      <span class="sub">เพื่อให้ระบบบันทึกข้อมูลแน่นอน</span></li>
     <li><b>เช็คผล</b>
       <span class="sub">Snap: รอสัก 10 วินาที แล้ว refresh ดูว่าคะแนนอยู่ครบ<br>Safe: รอจนกล่องขึ้น "บันทึกสำเร็จ X/X ช่อง" · ช่องแดงให้วางใหม่</span></li>
   </ol>
+  <figure class="guide">
+    <img src="{{IMG:sgs-guide.png}}" alt="เมนู ผลการเรียน → บันทึกผลการเรียน ตลอดภาคเรียน และช่องจำนวนรายการต่อหน้าที่ต้องตั้งให้เท่ากับจำนวนนักเรียนในห้อง">
+    <figcaption>ขั้นที่ 1–2: เลือกเมนู "บันทึกผลการเรียน ตลอดภาคเรียน" แล้วตั้งจำนวนรายการต่อหน้าให้เห็นนักเรียนครบทั้งห้อง</figcaption>
+  </figure>
 
   <h2>ควรรู้</h2>
   <ul class="notes">
+    <li>วางได้ทีละหลายคอลัมน์และหลายคนในครั้งเดียว</li>
+    <li>วางเสร็จแล้วกดปุ่มบันทึกของ SGS ทุกครั้ง</li>
     <li>ค่าเกินคะแนนเต็มหรือไม่ใช่ตัวเลข จะไม่กรอกอะไรเลยทั้งชุด พร้อมบอกว่าผิดตรงไหน</li>
-    <li>ช่องว่างใน Sheets จะข้าม ค่าเดิมใน SGS ยังอยู่</li>
+    <li>ช่องว่างใน Sheets / Excel จะข้าม ค่าเดิมใน SGS ยังอยู่</li>
     <li>คอลัมน์ที่ไม่ได้ติ๊กเปิดจะถูกข้าม — ดูชื่อคอลัมน์ในกล่องยืนยันก่อนกดตกลง</li>
     <li>refresh หรือเปลี่ยนวิชา ต้องคลิกปุ่มบนแถบใหม่ · ใช้ได้ทีละปุ่มต่อหน้า จะสลับแบบให้ refresh ก่อน</li>
     <li>ทำงานเฉพาะบนหน้า SGS ตอนกดปุ่ม ไม่ส่งข้อมูลไปที่อื่น</li>
   </ul>
 
+  <h2>Disclaimer</h2>
+  <div class="disclaimer">
+    <p>SGS Snap พัฒนาขึ้นเพื่อช่วยให้ครูใช้เวลากับการกรอกคะแนนน้อยลง และกรอกได้แม่นยำขึ้น ลดการพิมพ์ทีละช่องที่ทำให้ผิดพลาดง่าย</p>
+    <p><b>ผู้ใช้ต้องตรวจสอบคะแนนใน SGS อีกครั้งทุกครั้งหลังวาง</b> ให้ตรงกับข้อมูลต้นฉบับก่อนยืนยันผลการเรียน ความถูกต้องของคะแนนที่บันทึกเป็นความรับผิดชอบของผู้ใช้</p>
+    <p>เครื่องมือนี้ไม่ใช่ส่วนหนึ่งของระบบ SGS และไม่ได้เกี่ยวข้องกับหน่วยงานผู้พัฒนาระบบ SGS · ให้ใช้งานตามสภาพ (as-is) โดยไม่มีการรับประกัน · ทำงานในเครื่องของผู้ใช้เท่านั้น ไม่เก็บหรือส่งข้อมูลนักเรียนไปที่อื่น</p>
+  </div>
+
   <footer>
     <p class="credit">developed by โปรเจคเด็กดื้อ</p>
+    <p><a href="https://sutticue.dev">sutticue.dev</a> · Facebook: โปรเจคเด็กดื้อ · <a href="mailto:author@sutticue.dev">author@sutticue.dev</a></p>
     <p>{{VERSION}} · Chrome / Edge · Mac ใช้ <kbd>Cmd</kbd> แทน <kbd>Ctrl</kbd></p>
   </footer>
 </main>
