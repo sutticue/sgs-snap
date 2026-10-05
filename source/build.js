@@ -1,7 +1,8 @@
 // สร้าง ../sgs-snap.html จาก page.html + sgs-paste.js — ฝังปุ่ม 2 ตัว: SGS Snap (วางทันที) และ SGS Snap Safe (ทีละช่อง)
 // รัน: node source/build.js
 const fs = require('fs');
-const raw = fs.readFileSync(__dirname + '/sgs-paste.js', 'utf8').split('\n').filter(l => !/^\s*\/\//.test(l)).join('\n');
+// ตัดบรรทัดคอมเมนต์ทิ้ง ยกเว้นบรรทัดลิขสิทธิ์ (MIT ต้องติดไปกับโค้ดในปุ่มด้วย)
+const raw = fs.readFileSync(__dirname + '/sgs-paste.js', 'utf8').split('\n').filter(l => !/^\s*\/\//.test(l) || /Copyright/.test(l)).join('\n');
 const VERSION = (raw.match(/var VERSION = '([^']+)'/) || [])[1];
 if (!VERSION) throw new Error('ไม่เจอ VERSION ใน sgs-paste.js');
 

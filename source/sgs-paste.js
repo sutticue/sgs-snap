@@ -1,4 +1,5 @@
 // SGS — วางคะแนนจาก Google Sheets / Excel ลงหน้า "บันทึกผลการเรียน" ทีละหลายช่อง
+// SGS Snap · MIT License · Copyright (c) 2026 โปรเจคเด็กดื้อ (sutticue.dev)
 // กด bookmark 1 ครั้ง → คลิกช่องเริ่มต้น → Cmd/Ctrl+V
 // หน้า SGS บันทึกทันทีที่ค่าเปลี่ยน (CheckValue → PageMethods.SaveMe) และเก็บ state ไว้ในตัวแปร global
 // โหมดปกติ: กรอกทีละช่องแล้วรอ server ตอบก่อน (รู้ผลทุกช่อง)
