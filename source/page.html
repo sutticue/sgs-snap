@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SGS Snap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --text: #111; --muted: #6b6b6b; --line: #e5e5e5; --soft: #f7f7f7; --bg: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.75 "Sarabun", system-ui, sans-serif; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 16px; }
+  h1, h2, h3, .bm { font-family: "Anuphan", "Sarabun", system-ui, sans-serif; font-weight: 600; }
+  h1 { font-size: 36px; line-height: 1.2; margin: 0 0 8px; }
+  .lead { color: var(--muted); margin: 0; }
+  h2 { font-size: 15px; margin: 56px 0 12px; }
+  h2 span { color: var(--muted); font-weight: 500; }
+  ol { margin: 0; padding-left: 20px; }
+  li { margin: 6px 0; }
+  kbd { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+  .muted { color: var(--muted); }
+
+  .versions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .ver { border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
+  .ver h3 { font-size: 17px; margin: 0; }
+  .ver .what { color: var(--muted); font-size: 14px; margin: 2px 0 14px; }
+  .ver ul { margin: 0 0 18px; padding-left: 18px; font-size: 14px; flex: 1; }
+  .ver li { margin: 3px 0; }
+  .drag { padding: 18px 12px; border: 1px dashed #c8c8c8; border-radius: 6px; text-align: center; background: var(--soft); }
+  a.bm { display: inline-block; padding: 9px 18px; border-radius: 6px; background: var(--text); color: var(--bg); text-decoration: none; font-size: 16px; cursor: grab; }
+  a.bm:active { cursor: grabbing; }
+  a.bm:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+  .drag p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; }
+  td:first-child { color: var(--muted); white-space: nowrap; }
+
+  .flow li b { font-weight: 600; }
+  .flow .sub { display: block; color: var(--muted); font-size: 14px; }
+  ul.notes { margin: 0; padding-left: 20px; color: var(--muted); }
+  ul.notes li { margin: 4px 0; }
+
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  footer p { margin: 0 0 4px; }
+  footer .credit { color: var(--text); letter-spacing: .02em; }
+
+  @media (max-width: 600px) { .versions { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>SGS Snap</h1>
+  <p class="lead">copy คะแนนจาก Google Sheets แล้ววางลงหน้า "บันทึกผลการเรียน" ของ SGS ได้ทีเดียวหลายช่อง</p>
+
+  <h2>เลือกแบบที่ต้องการ <span>— ลากปุ่มขึ้นแถบ Bookmark จะเอาตัวเดียวหรือทั้งสองตัวก็ได้</span></h2>
+  <div class="versions">
+    <section class="ver">
+      <h3>Snap</h3>
+      <p class="what">วางปุ๊บ เต็มหน้าทันที</p>
+      <ul>
+        <li>คะแนนขึ้นทุกช่องพร้อมกัน</li>
+        <li>SGS บันทึกอยู่เบื้องหลัง</li>
+        <li>ต้อง refresh เช็คเองว่าติดครบ</li>
+      </ul>
+      <div class="drag">
+        <a class="bm" onclick="alert('อย่าคลิกปุ่มนี้ครับ\nให้กดค้างแล้วลากขึ้นไปวางบนแถบ Bookmark ด้านบน\n(ถ้าไม่เห็นแถบ กด Ctrl+Shift+B · Mac: Cmd+Shift+B)');return false" href="javascript:INSTANT">SGS Snap</a>
+        <p>ลากขึ้นแถบ Bookmark</p>
+      </div>
+    </section>
+    <section class="ver">
+      <h3>Safe</h3>
+      <p class="what">ค่อยๆ กรอก รู้ผลทุกช่อง</p>
+      <ul>
+        <li>กรอกทีละช่อง รอ SGS ตอบก่อนไปต่อ</li>
+        <li>เขียว = SGS รับแล้ว · แดง = ไม่รับ</li>
+        <li>เหมาะตอน SGS ช้าหรือคนใช้เยอะ</li>
+      </ul>
+      <div class="drag">
+        <a class="bm" onclick="alert('อย่าคลิกปุ่มนี้ครับ\nให้กดค้างแล้วลากขึ้นไปวางบนแถบ Bookmark ด้านบน\n(ถ้าไม่เห็นแถบ กด Ctrl+Shift+B · Mac: Cmd+Shift+B)');return false" href="javascript:SAFE">SGS Snap Safe</a>
+        <p>ลากขึ้นแถบ Bookmark</p>
+      </div>
+    </section>
+  </div>
+
+  <h2>ติดตั้ง <span>— ทำครั้งเดียว</span></h2>
+  <ol class="flow">
+    <li><b>เปิดแถบ Bookmark</b> — กด <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (Mac: <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
+      <span class="sub">จะมีแถบแคบๆ โผล่ใต้ช่องที่อยู่เว็บ</span></li>
+    <li><b>ลากปุ่มขึ้นแถบ</b> — กดค้างที่ปุ่มสีดำด้านบน แล้วลากไปปล่อยบนแถบนั้น
+      <span class="sub">ห้ามคลิกปุ่ม — คลิกแล้วจะไม่มีอะไรเกิดขึ้น</span></li>
+    <li><b>ปิดหน้านี้ได้เลย</b>
+      <span class="sub">ปุ่มอยู่บนแถบถาวร ปิด browser ก็ไม่หาย · ถ้ามีปุ่มเวอร์ชันเก่าค้างอยู่ คลิกขวา → ลบ</span></li>
+  </ol>
+
+  <h2>ใช้งาน <span>— ทุกครั้งที่เปิดหน้า SGS</span></h2>
+  <ol class="flow">
+    <li><b>เปิดหน้า "บันทึกผลการเรียน" ใน SGS</b> แล้วคลิกปุ่มบนแถบ Bookmark
+      <span class="sub">มุมขวาล่างต้องขึ้น <b>[{{VERSION}} · Snap] พร้อมแล้ว</b> หรือ <b>[{{VERSION}} · Safe] พร้อมแล้ว</b> — ไม่ขึ้น = ปุ่มยังไม่ทำงาน</span></li>
+    <li><b>ติ๊กเปิดคอลัมน์</b> ที่จะกรอกใน SGS</li>
+    <li><b>copy คะแนนจาก Google Sheets</b> — ลากเลือกเฉพาะตัวเลข แล้ว <kbd>Ctrl</kbd>+<kbd>C</kbd>
+      <span class="sub">เรียงนักเรียนให้ตรงกับลำดับใน SGS · ไม่ต้องติดหัวตาราง ชื่อ หรือเลขที่</span></li>
+    <li><b>คลิกช่องแรกใน SGS</b> (นักเรียนคนแรก คอลัมน์แรกของข้อมูล) แล้ว <kbd>Ctrl</kbd>+<kbd>V</kbd></li>
+    <li><b>ตรวจกล่องยืนยัน</b> — ดูว่าแถวและคอลัมน์ถูก แล้วกดตกลง</li>
+    <li><b>เช็คผล</b>
+      <span class="sub">Snap: รอสัก 10 วินาที แล้ว refresh ดูว่าคะแนนอยู่ครบ<br>Safe: รอจนกล่องขึ้น "บันทึกสำเร็จ X/X ช่อง" · ช่องแดงให้วางใหม่</span></li>
+  </ol>
+
+  <h2>ควรรู้</h2>
+  <ul class="notes">
+    <li>ค่าเกินคะแนนเต็มหรือไม่ใช่ตัวเลข จะไม่กรอกอะไรเลยทั้งชุด พร้อมบอกว่าผิดตรงไหน</li>
+    <li>ช่องว่างใน Sheets จะข้าม ค่าเดิมใน SGS ยังอยู่</li>
+    <li>คอลัมน์ที่ไม่ได้ติ๊กเปิดจะถูกข้าม — ดูชื่อคอลัมน์ในกล่องยืนยันก่อนกดตกลง</li>
+    <li>refresh หรือเปลี่ยนวิชา ต้องคลิกปุ่มบนแถบใหม่ · ใช้ได้ทีละปุ่มต่อหน้า จะสลับแบบให้ refresh ก่อน</li>
+    <li>ทำงานเฉพาะบนหน้า SGS ตอนกดปุ่ม ไม่ส่งข้อมูลไปที่อื่น</li>
+  </ul>
+
+  <footer>
+    <p class="credit">developed by โปรเจคเด็กดื้อ</p>
+    <p>{{VERSION}} · Chrome / Edge · Mac ใช้ <kbd>Cmd</kbd> แทน <kbd>Ctrl</kbd></p>
+  </footer>
+</main>
+</body>
+</html>
