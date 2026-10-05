@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SGS วางคะแนน</title>
+<style>
+  body { font: 17px/1.7 sans-serif; max-width: 680px; margin: 40px auto; padding: 0 16px; color: #1f2937; background: #fff; }
+  h1 { margin-bottom: 4px; }
+  .sub { color: #6b7280; margin-top: 0; }
+  .step { border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+  .step h2 { margin: 0 0 8px; font-size: 20px; }
+  .tag { display: inline-block; font-size: 13px; padding: 1px 8px; border-radius: 99px; background: #f3f4f6; color: #374151; margin-left: 6px; vertical-align: middle; }
+  .drag { text-align: center; margin: 18px 0 6px; }
+  a.bm { display: inline-block; padding: 12px 22px; background: #2563eb; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; cursor: grab; }
+  .warn { color: #b91c1c; font-weight: 700; text-align: center; margin: 0; }
+  ol { padding-left: 22px; margin: 6px 0; }
+  li { margin: 4px 0; }
+  kbd { background: #f3f4f6; border: 1px solid #d1d5db; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font: 14px monospace; }
+  .note { color: #4b5563; font-size: 15px; }
+</style>
+</head>
+<body>
+<h1>SGS วางคะแนน <span class="tag">{{VERSION}}</span></h1>
+<p class="sub">copy คะแนนจาก Google Sheets แล้ววางลงหน้าบันทึกผลการเรียนของ SGS ได้ทีเดียวหลายช่อง</p>
+
+<div class="step">
+  <h2>ขั้นที่ 1 · ติดตั้ง <span class="tag">ทำครั้งเดียว</span></h2>
+  <ol>
+    <li>กด <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> ให้แถบ Bookmark โผล่ใต้ช่องที่อยู่เว็บ (Mac: <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)</li>
+    <li><b>กดค้าง</b>ที่ปุ่มสีน้ำเงินด้านล่าง แล้ว<b>ลากขึ้นไปปล่อยบนแถบ Bookmark</b></li>
+    <li>เห็นปุ่ม "SGS วางคะแนน" บนแถบแล้ว → ปิดหน้านี้ได้เลย</li>
+    <li>ถ้าเคยลากปุ่มเวอร์ชันเก่าไว้ → คลิกขวาที่ปุ่มเก่าบนแถบ → ลบ ให้เหลือปุ่มเดียว</li>
+  </ol>
+  <div class="drag"><a class="bm" onclick="alert('อย่าคลิกปุ่มนี้ครับ\nให้กดค้างแล้วลากขึ้นไปวางบนแถบ Bookmark ด้านบน\n(ถ้าไม่เห็นแถบ กด Ctrl+Shift+B · Mac: Cmd+Shift+B)');return false" href="javascript:void 0">SGS วางคะแนน</a></div>
+  <p class="warn">↑ ลากปุ่มนี้ขึ้นไป · ห้ามคลิก</p>
+</div>
+
+<div class="step">
+  <h2>ขั้นที่ 2 · ใช้งาน <span class="tag">ทุกครั้งที่เปิดหน้า SGS</span></h2>
+  <ol>
+    <li>เปิดหน้า "บันทึกผลการเรียน" ใน SGS → คลิกปุ่ม "SGS วางคะแนน" <b>บนแถบ Bookmark</b> → มีกล่องดำขึ้นมุมขวาล่าง ต้องขึ้นว่า <b>[{{VERSION}}]</b> ถ้าไม่ขึ้นหรือเลขไม่ตรง = ปุ่มบนแถบเป็นตัวเก่า ลบแล้วลากใหม่</li>
+    <li>ติ๊กเปิดคอลัมน์ที่จะกรอก</li>
+    <li>ใน Google Sheets ลากเลือกคะแนน (เรียงนักเรียนตามลำดับเดียวกับ SGS) แล้ว <kbd>Ctrl</kbd>+<kbd>C</kbd></li>
+    <li>คลิกช่องแรกใน SGS ที่ต้องการให้ข้อมูลเริ่มลง แล้ว <kbd>Ctrl</kbd>+<kbd>V</kbd> → กดตกลงในกล่องยืนยัน</li>
+  </ol>
+  <p class="note">refresh หน้า SGS หรือเปลี่ยนวิชา → คลิกปุ่มบนแถบ Bookmark ใหม่อีกครั้ง</p>
+</div>
+
+<p class="note">🟨 กำลังบันทึก · 🟩 server รับแล้ว · 🟥 server ไม่รับ (ดูเหตุผลในกล่องดำ)<br>
+ช่องว่างใน Sheets จะข้าม ไม่ลบค่าเดิม · ถ้ามีค่าเกินคะแนนเต็มหรือไม่ใช่ตัวเลข จะไม่กรอกอะไรเลยทั้งชุด<br>
+Mac ใช้ <kbd>Cmd</kbd> แทน <kbd>Ctrl</kbd> · ใช้ได้กับ Chrome และ Edge</p>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/
+
+# สำเนาหน้าติดตั้งรุ่นเก่าที่เก็บไว้เอง — ไม่ใช่ output ของ build.js
+sgs-paste-*.html
