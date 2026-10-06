@@ -90,7 +90,7 @@
       <span class="status-value" role="status" aria-live="polite"><span class="dot" aria-hidden="true"></span><span id="sgs-status-text">กำลังเช็ค…</span></span>
       <button type="button" id="sgs-status-btn" disabled aria-busy="true">เช็คอีกครั้ง</button>
     </div>
-    <p>วัดจากเครื่องคุณว่าเข้าถึง SGS ได้ไหมและเร็วแค่ไหน — ระบบบันทึกคะแนนอาจช้ากว่านี้ ดูความเร็วจริงได้จากปุ่ม Safe · <a href="sgs-status.html">วิธีเช็คเพิ่มเติม</a></p>
+    <p>วัดจากเครื่องคุณ โดยเปิดหน้าเข้าสู่ระบบของ SGS 1 ครั้งแล้วจับเวลา — ใกล้เคียงความเร็วตอนบันทึกคะแนน ดูความเร็วจริงได้จากปุ่ม Safe · <a href="sgs-status.html">วิธีเช็คเพิ่มเติม</a></p>
   </section>
 
 
@@ -186,9 +186,14 @@
   </footer>
 </main>
 <script>
-  // เช็คสถานะ SGS: โหลดรูป 43 byte จาก SGS 1 ครั้งต่อการเปิดหน้า/กดปุ่ม แล้วจับเวลา — ไม่มีการเช็คซ้ำอัตโนมัติ
+  // เช็คสถานะ SGS — 1 รอบต่อการเปิดหน้า/กดปุ่ม ไม่มีการเช็คซ้ำอัตโนมัติ
+  // 1) รูป 43 byte: เสิร์ฟจาก nginx หน้าด่าน → บอกแค่ว่าเข้าถึงเครื่องได้ไหม
+  // 2) หน้า SignIn.aspx: ต้องผ่าน ASP.NET + ฐานข้อมูลจริง → เวลาที่ใช้ = ระบบหนักแค่ไหน
+  //    โหลดผ่าน <img> จึงอ่านเนื้อหา/สถานะไม่ได้ (onerror เสมอเพราะไม่ใช่รูป) ใช้แค่เวลาที่ตอบกลับ
   (function () {
-    var PROBE = 'https://sgs.bopp-obec.info/sgs/Images/space.gif';
+    var BASE = 'https://sgs.bopp-obec.info/sgs/';
+    var NET_PROBE = BASE + 'Images/space.gif';
+    var APP_PROBE = BASE + 'Security/SignIn.aspx?MasterPage=../Master+Pages/HorizontalMenu.master&Target=';
     var box = document.getElementById('sgs-status');
     var text = document.getElementById('sgs-status-text');
     var btn = document.getElementById('sgs-status-btn');
@@ -199,24 +204,33 @@
       btn.disabled = !done;
       btn.setAttribute('aria-busy', String(!done));
     }
-    function check() {
-      show('checking', 'กำลังเช็ค…');
+    // โหลด url ผ่าน <img> → cb(ตอบกลับไหม, เป็นรูปไหม, วินาที) · timeout = ไม่ตอบ
+    function probe(url, timeoutMs, cb) {
       var img = new Image(), start = performance.now(), finished = false;
-      var timer = setTimeout(function () { finish(false); }, 10000);
-      function finish(ok) {
+      var timer = setTimeout(function () { end(false, false); }, timeoutMs);
+      function end(answered, isImage) {
         if (finished) return;
         finished = true;
         clearTimeout(timer);
         img.onload = img.onerror = null;
-        var sec = (performance.now() - start) / 1000, t = sec.toFixed(1) + ' วินาที';
-        if (!ok) show('down', 'เข้าไม่ได้ — SGS อาจล่ม ลองใหม่อีกสักพัก');
-        else if (sec < 1) show('ok', 'พร้อมใช้ · ตอบใน ' + t);
-        else if (sec < 5) show('slow', 'ช้า · ตอบใน ' + t + ' — อาจมีคนใช้เยอะ');
-        else show('down', 'ช้ามาก · ตอบใน ' + t + ' — ควรรอไปกรอกช่วงอื่น');
+        cb(answered, isImage, (performance.now() - start) / 1000);
       }
-      img.onload = function () { finish(true); };
-      img.onerror = function () { finish(false); };
-      img.src = PROBE + '?t=' + Date.now();
+      img.onload = function () { end(true, true); };
+      img.onerror = function () { end(true, false); };
+      img.src = url + (url.indexOf('?') < 0 ? '?' : '&') + '_t=' + Date.now();
+    }
+    function check() {
+      show('checking', 'กำลังเช็ค…');
+      probe(NET_PROBE, 10000, function (answered, isImage) {
+        if (!answered || !isImage) { show('down', 'เข้าไม่ได้ — SGS อาจล่ม ลองใหม่อีกสักพัก'); return; }
+        probe(APP_PROBE, 20000, function (answered2, _, sec) {
+          var t = sec.toFixed(1) + ' วินาที';
+          if (!answered2) show('down', 'ระบบไม่ตอบใน 20 วินาที — ควรรอไปกรอกช่วงอื่น');
+          else if (sec < 2) show('ok', 'พร้อมใช้ · ระบบตอบใน ' + t);
+          else if (sec < 6) show('slow', 'ช้า · ระบบตอบใน ' + t + ' — อาจมีคนใช้เยอะ');
+          else show('down', 'ช้ามาก · ระบบตอบใน ' + t + ' — ควรรอไปกรอกช่วงอื่น');
+        });
+      });
     }
     btn.addEventListener('click', check);
     check();
