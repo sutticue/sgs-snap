@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SGS ช้าไหม — วิธีเช็ค</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --text: #111; --muted: #6b6b6b; --line: #e5e5e5; --soft: #f7f7f7; --bg: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.75 "Sarabun", system-ui, sans-serif; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 16px; }
+  h1, h2 { font-family: "Anuphan", "Sarabun", system-ui, sans-serif; font-weight: 600; }
+  h1 { font-size: 36px; line-height: 1.2; margin: 0 0 8px; }
+  .lead { color: var(--muted); margin: 0; }
+  h2 { font-size: 15px; margin: 56px 0 12px; }
+  h2 span { color: var(--muted); font-weight: 500; }
+  ol, ul { margin: 0; padding-left: 20px; }
+  li { margin: 6px 0; }
+  .sub { display: block; color: var(--muted); font-size: 14px; }
+  kbd { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--soft); border-radius: 4px; padding: 1px 5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 16px; }
+  th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; font-size: 14px; }
+  td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+  .ok { background: #16a34a; } .slow { background: #ca8a04; } .bad { background: #dc2626; }
+  .note { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+  a { color: inherit; text-underline-offset: 2px; }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  footer p { margin: 0 0 4px; }
+  footer .credit { color: var(--text); letter-spacing: .02em; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>SGS ช้าไหม</h1>
+  <p class="lead">วิธีเช็คว่าตอนนี้ server ของ SGS หนักแค่ไหน ก่อนตัดสินใจกรอกคะแนนหรือรอไปกรอกช่วงอื่น</p>
+
+  <h2>ทำไมต้องเช็คทางอ้อม</h2>
+  <p>ตัวเลขโหลดของ server (CPU, จำนวนคนใช้) มีแค่ทีมดูแล SGS ที่เห็น
+  สิ่งที่เราวัดได้คือ <b>SGS ตอบเร็วแค่ไหน</b> — ถ้าตอบช้า แปลว่า server กำลังหนัก</p>
+
+  <h2>วิธีที่ 1 · ดูเวลาตอบใน browser <span>— แม่นที่สุด</span></h2>
+  <ol>
+    <li>เปิดหน้า "บันทึกผลการเรียน" ใน SGS แล้วกด <kbd>F12</kbd> (Mac: <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd>)
+      <span class="sub">จะมีแผงเครื่องมือเปิดขึ้นข้างหน้าเว็บ</span></li>
+    <li>เลือกแท็บ <b>Network</b> แล้วพิมพ์ <code>SaveMe</code> ในช่อง Filter</li>
+    <li>กรอกหรือวางคะแนนตามปกติ
+      <span class="sub">ทุกช่องที่บันทึกจะมีบรรทัด <code>SaveMe</code> โผล่ขึ้นมา 1 บรรทัด</span></li>
+    <li>ดูคอลัมน์ <b>Time</b> ของแต่ละบรรทัด แล้วเทียบกับตารางด้านล่าง</li>
+  </ol>
+  <table>
+    <tr><th>Time</th><th>ความหมาย</th></tr>
+    <tr><td><span class="dot ok"></span>ต่ำกว่า 0.5 วินาที</td><td>ปกติ กรอกได้เลย</td></tr>
+    <tr><td><span class="dot slow"></span>1 – 3 วินาที</td><td>เริ่มหนัก ยังกรอกได้ แต่ควรใช้ SGS Snap Safe เพื่อรู้ผลทุกช่อง</td></tr>
+    <tr><td><span class="dot bad"></span>เกิน 5 วินาที</td><td>หนักมาก ควรรอไปกรอกช่วงอื่น</td></tr>
+    <tr><td><span class="dot bad"></span><code>(failed)</code> · 500 · 502 · 504</td><td>server ล่มหรือรับไม่ไหว — หยุดกด refresh รัวๆ แล้วรอ 5–10 นาที</td></tr>
+  </table>
+  <p class="note">ค่าในคอลัมน์ Time แสดงเป็น ms (มิลลิวินาที) — 1,000 ms = 1 วินาที</p>
+
+  <h2>วิธีที่ 2 · สังเกตจาก SGS Snap Safe</h2>
+  <ul>
+    <li>ช่องเปลี่ยนจาก<b>เหลืองเป็นเขียว</b>เร็วแค่ไหน คือความเร็วที่ SGS ตอบ</li>
+    <li>ถ้าไล่ไปช้าๆ ทีละช่องเห็นได้ชัด แปลว่า server หนัก</li>
+    <li>ถ้ากล่องขึ้น "server ไม่ตอบ 15 วินาที" แปลว่าค้างหรือล่ม</li>
+  </ul>
+
+  <h2>วิธีที่ 3 · ถามคนอื่น</h2>
+  <p>กลุ่ม Facebook หรือ LINE ของครูมักมีคนโพสต์ก่อนเสมอเมื่อ SGS ล่ม — ถ้าหลายคนเจอพร้อมกัน แปลว่าเป็นที่ server ไม่ใช่เครื่องเรา</p>
+
+  <h2>ช่วงที่มักจะหนัก</h2>
+  <ul>
+    <li><b>ใกล้วันกำหนดส่งคะแนน</b> — ครูทั้งระบบเข้าพร้อมกัน</li>
+    <li><b>เวลาทำงาน</b> โดยเฉพาะช่วงบ่ายและหัวค่ำ</li>
+    <li>ช่วงที่คนน้อยกว่า: ดึก (หลัง 4 ทุ่ม) หรือเช้าตรู่ (ก่อน 7 โมง) — แต่บางคืนระบบอาจปิดปรับปรุง</li>
+    <li>กรอกเสร็จก่อนกำหนดส่ง 1–2 สัปดาห์ จะสบายที่สุด</li>
+  </ul>
+
+  <h2>สิ่งที่ไม่ควรทำ</h2>
+  <ul>
+    <li><b>กด refresh รัวๆ ตอน SGS ล่ม</b> — แต่ละครั้งคือคำขอใหม่ที่ไปเพิ่มภาระ</li>
+    <li><b>ตั้งโปรแกรมยิงเช็ค SGS อัตโนมัติ</b> — เป็นการส่งคำขอไป server ราชการโดยไม่ได้ใช้งานจริง และเพิ่มภาระตอนที่หนักอยู่แล้ว</li>
+  </ul>
+
+  <h2>ไปต่อ</h2>
+  <p><a href="sgs-snap.html">SGS Snap</a> — copy คะแนนจาก Google Sheets หรือ Excel แล้ววางลง SGS ได้ทีเดียวหลายช่อง</p>
+
+  <footer>
+    <p class="credit">developed by โปรเจคเด็กดื้อ</p>
+    <p><a href="https://sutticue.dev">sutticue.dev</a> · Facebook: โปรเจคเด็กดื้อ · <a href="mailto:author@sutticue.dev">author@sutticue.dev</a></p>
+  </footer>
+</main>
+</body>
+</html>

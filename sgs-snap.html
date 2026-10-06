@@ -46,6 +46,7 @@
   .flow .sub { display: block; color: var(--muted); font-size: 14px; }
   ul.notes { margin: 0; padding-left: 20px; color: var(--muted); }
   ul.notes li { margin: 4px 0; }
+  ul.notes a { color: var(--text); text-underline-offset: 2px; }
 
   .disclaimer { color: var(--muted); font-size: 14px; }
   .disclaimer p { margin: 0 0 8px; }
@@ -56,6 +57,25 @@
   footer a { color: inherit; text-underline-offset: 2px; }
   footer a:hover { color: var(--text); }
 
+
+  .status { margin-top: 32px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 8px; }
+  .status-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .status-label { font-size: 14px; color: var(--muted); }
+  .status-value { font-weight: 600; flex: 1; min-width: 200px; }
+  .status .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; background: #c8c8c8; }
+  .status[data-state="ok"] .dot { background: #16a34a; }
+  .status[data-state="slow"] .dot { background: #ca8a04; }
+  .status[data-state="down"] .dot { background: #dc2626; }
+  .status[data-state="checking"] .dot { animation: blink 1s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .status button { font: inherit; font-size: 14px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); cursor: pointer; }
+  .status button:hover { background: var(--soft); }
+  .status button:disabled { opacity: .5; cursor: default; }
+  .status button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+  .status p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+  .status p a { color: var(--text); text-underline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .status[data-state="checking"] .dot { animation: none; } }
+
   @media (max-width: 600px) { .versions { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -63,6 +83,16 @@
 <main class="wrap">
   <h1>SGS Snap</h1>
   <p class="lead">copy คะแนนจาก Google Sheets หรือ Excel แล้ววางลงหน้า "บันทึกผลการเรียน" ของ SGS ได้ทีเดียวหลายช่อง</p>
+
+  <section class="status" id="sgs-status" data-state="checking" aria-labelledby="sgs-status-label">
+    <div class="status-row">
+      <span class="status-label" id="sgs-status-label">สถานะ SGS ตอนนี้</span>
+      <span class="status-value" role="status" aria-live="polite"><span class="dot" aria-hidden="true"></span><span id="sgs-status-text">กำลังเช็ค…</span></span>
+      <button type="button" id="sgs-status-btn" disabled aria-busy="true">เช็คอีกครั้ง</button>
+    </div>
+    <p>วัดจากเครื่องคุณว่าเข้าถึง SGS ได้ไหมและเร็วแค่ไหน — ระบบบันทึกคะแนนอาจช้ากว่านี้ ดูความเร็วจริงได้จากปุ่ม Safe · <a href="sgs-status.html">วิธีเช็คเพิ่มเติม</a></p>
+  </section>
+
 
   <h2>เลือกแบบที่ต้องการ <span>— ลากปุ่มขึ้นแถบ Bookmark จะเอาตัวเดียวหรือทั้งสองตัวก็ได้</span></h2>
   <div class="versions">
@@ -139,6 +169,7 @@
     <li>คอลัมน์ที่ไม่ได้ติ๊กเปิดจะถูกข้าม — ดูชื่อคอลัมน์ในกล่องยืนยันก่อนกดตกลง</li>
     <li>refresh หรือเปลี่ยนวิชา ต้องคลิกปุ่มบนแถบใหม่ · ใช้ได้ทีละปุ่มต่อหน้า จะสลับแบบให้ refresh ก่อน</li>
     <li>ทำงานเฉพาะบนหน้า SGS ตอนกดปุ่ม ไม่ส่งข้อมูลไปที่อื่น</li>
+    <li>SGS ช้าหรือล่ม? ดู <a href="sgs-status.html">วิธีเช็คว่า SGS หนักแค่ไหน</a></li>
   </ul>
 
   <h2>Disclaimer</h2>
@@ -154,5 +185,42 @@
     <p>v8 · Chrome / Edge · Mac ใช้ <kbd>Cmd</kbd> แทน <kbd>Ctrl</kbd></p>
   </footer>
 </main>
+<script>
+  // เช็คสถานะ SGS: โหลดรูป 43 byte จาก SGS 1 ครั้งต่อการเปิดหน้า/กดปุ่ม แล้วจับเวลา — ไม่มีการเช็คซ้ำอัตโนมัติ
+  (function () {
+    var PROBE = 'https://sgs.bopp-obec.info/sgs/Images/space.gif';
+    var box = document.getElementById('sgs-status');
+    var text = document.getElementById('sgs-status-text');
+    var btn = document.getElementById('sgs-status-btn');
+    function show(state, msg) {
+      box.setAttribute('data-state', state);
+      text.textContent = msg;
+      var done = state !== 'checking';
+      btn.disabled = !done;
+      btn.setAttribute('aria-busy', String(!done));
+    }
+    function check() {
+      show('checking', 'กำลังเช็ค…');
+      var img = new Image(), start = performance.now(), finished = false;
+      var timer = setTimeout(function () { finish(false); }, 10000);
+      function finish(ok) {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        img.onload = img.onerror = null;
+        var sec = (performance.now() - start) / 1000, t = sec.toFixed(1) + ' วินาที';
+        if (!ok) show('down', 'เข้าไม่ได้ — SGS อาจล่ม ลองใหม่อีกสักพัก');
+        else if (sec < 1) show('ok', 'พร้อมใช้ · ตอบใน ' + t);
+        else if (sec < 5) show('slow', 'ช้า · ตอบใน ' + t + ' — อาจมีคนใช้เยอะ');
+        else show('down', 'ช้ามาก · ตอบใน ' + t + ' — ควรรอไปกรอกช่วงอื่น');
+      }
+      img.onload = function () { finish(true); };
+      img.onerror = function () { finish(false); };
+      img.src = PROBE + '?t=' + Date.now();
+    }
+    btn.addEventListener('click', check);
+    check();
+  })();
+</script>
 </body>
 </html>

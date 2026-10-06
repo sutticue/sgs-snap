@@ -41,6 +41,7 @@ developed by โปรเจคเด็กดื้อ
 
 ## พัฒนา
 
+- `sgs-status.html` — คู่มือเช็คว่า SGS ช้า/หนักแค่ไหน (เขียนตรง ไม่ผ่าน build)
 - `index.html` ส่งต่อไป `sgs-snap.html` · `CNAME` = โดเมนของ GitHub Pages
 
 ```bash
